@@ -1,32 +1,37 @@
-// === PAGE LOADER LOGIC (IMPROVED) ===
+// === PAGE LOADER LOGIC (ROBUST) ===
 window.addEventListener('DOMContentLoaded', function() {
 	const loader = document.getElementById('page-loader');
 	if (!loader) return;
 
-	// Helper: Wait for all main images in the viewport to load
-	function waitForCriticalImages(callback) {
-		// Select images in hero and first project section (above the fold)
-		const heroImgs = Array.from(document.querySelectorAll('.hero img, .projects-rz-list img')).slice(0, 3); // adjust as needed
-		if (!heroImgs.length) {
+	function waitForCriticalImages(callback, timeout = 4000) {
+		const imgs = Array.from(document.querySelectorAll('.projects-rz-list img')).slice(0, 3);
+		if (!imgs.length) {
 			callback();
 			return;
 		}
-		let loaded = 0;
-		heroImgs.forEach(img => {
+		let loaded = 0, done = false;
+		function finish() {
+			if (!done) {
+				done = true;
+				callback();
+			}
+		}
+		imgs.forEach(img => {
 			if (img.complete && img.naturalWidth !== 0) {
 				loaded++;
-				if (loaded === heroImgs.length) callback();
+				if (loaded === imgs.length) finish();
 			} else {
 				img.addEventListener('load', () => {
 					loaded++;
-					if (loaded === heroImgs.length) callback();
+					if (loaded === imgs.length) finish();
 				});
 				img.addEventListener('error', () => {
 					loaded++;
-					if (loaded === heroImgs.length) callback();
+					if (loaded === imgs.length) finish();
 				});
 			}
 		});
+		setTimeout(finish, timeout); // Fallback: always finish after timeout
 	}
 
 	window.addEventListener('load', function() {
@@ -36,7 +41,7 @@ window.addEventListener('DOMContentLoaded', function() {
 				setTimeout(() => {
 					loader.style.display = 'none';
 				}, 700);
-			}, 600); // Let the dot finish its motion
+			}, 600);
 		});
 	});
 });
