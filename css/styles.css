@@ -1,3 +1,70 @@
+/* === PAGE LOADER: VERTICAL LINE + ACTIVE NODE === */
+.page-loader {
+  position: fixed;
+  z-index: 9999;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #181c22 0%, #1a2027 100%);
+  transition: opacity 0.6s cubic-bezier(.4,0,.2,1);
+  opacity: 1;
+  pointer-events: all;
+}
+.page-loader.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+.loader-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+}
+.loader-vertical-line {
+  width: 1px;
+  height: 150px;
+  background: rgba(255,255,255,0.12);
+  position: relative;
+  margin-bottom: -150px;
+  z-index: 1;
+}
+.loader-dot {
+  position: relative;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2de1a6;
+  box-shadow: 0 0 12px 0 rgba(45,225,166,0.4);
+  z-index: 2;
+  transition: box-shadow 0.3s;
+  animation: loader-dot-move 1.5s cubic-bezier(.4,0,.2,1) forwards;
+}
+.page-loader.hide .loader-dot {
+  box-shadow: none;
+}
+@keyframes loader-dot-move {
+  0% { top: 0; }
+  10% { box-shadow: 0 0 12px 0 rgba(45,225,166,0.4); }
+  80% { box-shadow: 0 0 18px 2px rgba(45,225,166,0.5); }
+  100% { top: 142px; box-shadow: 0 0 0 0 rgba(45,225,166,0.0); }
+}
+.loader-text {
+  margin-top: 32px;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: #fff;
+  opacity: 0.6;
+  text-align: center;
+  transition: opacity 0.5s;
+  animation: loader-text-fade 1.2s 0.3s cubic-bezier(.4,0,.2,1) both;
+}
+@keyframes loader-text-fade {
+  0% { opacity: 0; }
+  100% { opacity: 0.6; }
+}
 /* === PROJECTS GREEN OVERLAY RTL ANIMATION === */
 .project-rz-green-overlay {
   position: absolute;

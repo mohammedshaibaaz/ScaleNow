@@ -1,3 +1,17 @@
+// === PAGE LOADER LOGIC ===
+window.addEventListener('DOMContentLoaded', function() {
+	const loader = document.getElementById('page-loader');
+	if (!loader) return;
+	// Wait for all critical resources (fonts, CSS, images)
+	window.addEventListener('load', function() {
+		setTimeout(() => {
+			loader.classList.add('hide');
+			setTimeout(() => {
+				loader.style.display = 'none';
+			}, 700);
+		}, 600); // Let the dot finish its motion
+	});
+});
 // === Premium Editorial Approach Timeline Animation ===
 document.addEventListener('DOMContentLoaded', function () {
 	var timelineCol = document.querySelector('.process-timeline-col');
