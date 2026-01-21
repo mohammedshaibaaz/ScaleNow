@@ -1,15 +1,43 @@
-// === PAGE LOADER LOGIC ===
+// === PAGE LOADER LOGIC (IMPROVED) ===
 window.addEventListener('DOMContentLoaded', function() {
 	const loader = document.getElementById('page-loader');
 	if (!loader) return;
-	// Wait for all critical resources (fonts, CSS, images)
+
+	// Helper: Wait for all main images in the viewport to load
+	function waitForCriticalImages(callback) {
+		// Select images in hero and first project section (above the fold)
+		const heroImgs = Array.from(document.querySelectorAll('.hero img, .projects-rz-list img')).slice(0, 3); // adjust as needed
+		if (!heroImgs.length) {
+			callback();
+			return;
+		}
+		let loaded = 0;
+		heroImgs.forEach(img => {
+			if (img.complete && img.naturalWidth !== 0) {
+				loaded++;
+				if (loaded === heroImgs.length) callback();
+			} else {
+				img.addEventListener('load', () => {
+					loaded++;
+					if (loaded === heroImgs.length) callback();
+				});
+				img.addEventListener('error', () => {
+					loaded++;
+					if (loaded === heroImgs.length) callback();
+				});
+			}
+		});
+	}
+
 	window.addEventListener('load', function() {
-		setTimeout(() => {
-			loader.classList.add('hide');
+		waitForCriticalImages(() => {
 			setTimeout(() => {
-				loader.style.display = 'none';
-			}, 700);
-		}, 600); // Let the dot finish its motion
+				loader.classList.add('hide');
+				setTimeout(() => {
+					loader.style.display = 'none';
+				}, 700);
+			}, 600); // Let the dot finish its motion
+		});
 	});
 });
 // === Premium Editorial Approach Timeline Animation ===
